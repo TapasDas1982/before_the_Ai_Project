@@ -1,0 +1,11 @@
+---
+description: Before the AI Project rule pack. Read AGENTS.md and .ai-rules/ before working.
+alwaysApply: true
+---
+
+This repository follows the **Before the AI Project** rule pack.
+
+Before any task, read `AGENTS.md` at the repository root and follow its reading order into `.ai-rules/`.
+Verify current versions and APIs in official docs rather than relying on memory, and record what you verified in `.ai-rules/project/FRESHNESS.md`.
+
+<!-- Managed by the Before the AI Project installer. Re-running the installer overwrites this file. -->
