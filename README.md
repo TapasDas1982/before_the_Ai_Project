@@ -16,6 +16,9 @@ A small, opinionated rule pack that you drop into a repository *before* the firs
 | Security | Prompt injection, secrets, PII, tool sandboxing | [`rules/07-security.md`](rules/07-security.md) |
 | Ops | Cost, latency, observability, fallbacks | [`rules/08-ops.md`](rules/08-ops.md) |
 | Technology | How to pick and update models, frameworks and vector stores | [`rules/09-technology.md`](rules/09-technology.md) |
+| Dated facts | Prices, limits, parameters and spec versions, each with a verified date, re-checked monthly | [`rules/99-dated-facts.md`](rules/99-dated-facts.md) |
+
+The rules are based on current primary sources (Anthropic, OpenAI, Google, OWASP, OpenTelemetry, MCP, peer-reviewed research). Fast-changing specifics are kept in `99-dated-facts.md` so the rules themselves stay true when details change.
 
 ---
 
@@ -65,13 +68,13 @@ The installer **never overwrites your files**. If `AGENTS.md` or `CLAUDE.md` alr
 
 ## Update
 
-Re-run the same install command. Only `.ai-rules/rules/` and `.ai-rules/VERSION` are refreshed; everything under `.ai-rules/project/` stays yours. See [`CHANGELOG.md`](CHANGELOG.md) for what changed.
+Re-run the same install command. `.ai-rules/rules/`, `.ai-rules/VERSION`, the Cursor rule and the marked block in `AGENTS.md` / `CLAUDE.md` / Copilot instructions are refreshed; everything under `.ai-rules/project/` stays yours. Improved project templates are not applied to existing files, so check [`CHANGELOG.md`](CHANGELOG.md) for template changes you may want to copy across by hand.
 
 ## First 30 minutes after installing
 
-1. Fill in `.ai-rules/project/PROJECT_MAP.md`: what the project is, its layers, where things live.
-2. Fill in `.ai-rules/project/FRESHNESS.md`: every model, SDK and framework you use, the version, and **the date you verified it** against official docs.
-3. Write 10–20 golden examples in `.ai-rules/project/EVALS.md` before building the feature.
+1. Fill in `.ai-rules/project/PROJECT_MAP.md`: commands, non-obvious conventions, and what not to touch. Keep it short; only what an agent can't infer from the code.
+2. Fill in `.ai-rules/project/FRESHNESS.md`: every model (with API version and retirement date), SDK and framework you use, and **the date you verified it** against official docs.
+3. Seed 10–20 eval cases in `.ai-rules/project/EVALS.md`, then grow them from real traces and bugs.
 4. Record your first decision (model, vector store, framework) in `.ai-rules/project/DECISIONS.md`.
 5. Anything in the rules that doesn't fit your project goes in `.ai-rules/project/OVERRIDES.md`, with a reason.
 

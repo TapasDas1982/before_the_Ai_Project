@@ -1,13 +1,9 @@
 # Project map
 
-> Keep this under ~150 lines. Update it in the same change that alters structure. See `.ai-rules/rules/02-mapping.md`.
+> Only what an agent **can't** infer from the code, `ls` or the README. Keep it under ~150 lines, written by a human. Don't commit an unedited LLM-generated version. See `.ai-rules/rules/02-mapping.md`.
 > Last reviewed: YYYY-MM-DD
 
-## What this project is
-
-<!-- Two sentences: what it does and who it is for. -->
-
-## How to run
+## Commands
 
 | Task | Command |
 |---|---|
@@ -17,32 +13,22 @@
 | Run evals | |
 | Ingest / re-index data | |
 
-## Layers → folders
+## Conventions that aren't obvious
 
-| Layer | Folder(s) | Notes |
-|---|---|---|
-| Interface | | |
-| Application / orchestration | | |
-| AI capability (prompts, tools, retrieval, parsing) | | |
-| Adapters (LLM, embeddings, vector store) | | |
-| Data / ingestion | | |
-| Evals | | |
+<!-- Non-default rules: naming, which layer owns what, what must never import what, where prompts/tools/the model adapter/eval sets live. -->
 
-## Request flow
+## Here be dragons
 
-```
-user → … → retrieval → model → validation → response
-```
+<!-- Fragile areas, generated code, things agents must not touch, and why. -->
 
-## Prompts
+## Non-obvious data flows
 
-| Prompt | File | Used by | Version |
-|---|---|---|---|
+<!-- Only flows the code doesn't make obvious, e.g. "user request → permission filter → hybrid search → rerank → model → schema validation". -->
 
-## Tools available to agents
+## Tools and MCP servers available to agents
 
-| Tool | What it does | Side effects (read/write/destructive/external) | Approval needed? |
-|---|---|---|---|
+| Tool / server | What it does | Side effects (read/write/destructive/external) | Approval needed? | Pinned version / description hash / scopes |
+|---|---|---|---|---|
 
 ## Data sources (RAG)
 
@@ -53,7 +39,3 @@ user → … → retrieval → model → validation → response
 
 | Service | Used for | Config / env var |
 |---|---|---|
-
-## Here be dragons
-
-<!-- Fragile areas, generated code, things agents must not touch. -->

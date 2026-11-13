@@ -1,7 +1,12 @@
 # Evals
 
-> Write 10–20 golden cases **before** building the feature. Every production bug becomes a new case. See `.ai-rules/rules/06-evals.md`.
-> Move to `evals/` with a runner once this grows past ~30 cases.
+> Start by reading ~100 real traces and listing the failure types you see; build checks for the most common ones. Seed 10–20 cases for planned capabilities. Every production bug becomes a new case. Run ≥3 trials per case. See `.ai-rules/rules/06-evals.md`.
+> Move to `evals/` (portable JSONL/CSV + grader code) once this grows past ~30 cases.
+
+## Failure taxonomy (from reading traces)
+
+| Failure type | Count | Example trace | Eval check |
+|---|---|---|---|
 
 ## How to run
 
@@ -26,4 +31,5 @@
 
 ## Judge rubric (if using LLM-as-judge)
 
-<!-- Criteria, with one pass and one fail example each. Record the judge model and its agreement rate with human labels. -->
+<!-- One binary pass/fail judge per failure type. Rubric with pass and fail examples, plus an "Unknown" option.
+     Record: judge model, human-labelled validation set size (≥30–50 pass and ≥30–50 fail), TPR and TNR. -->

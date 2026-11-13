@@ -1,32 +1,39 @@
 # 02 · Mapping
 
-Agents and new teammates fail in the same way: they don't know where things are, so they guess, duplicate or break boundaries. A short, current project map fixes most of it.
+Agents and new teammates fail the same way: they don't know where things are, so they guess, duplicate or break boundaries. A short map helps. A long one hurts. A peer-reviewed 2026 study (arXiv 2602.11988) found that context files raised agent cost by more than 20% without generally improving task success, that repository overviews didn't help, and that LLM-generated files slightly hurt. So the map holds only what an agent can't work out for itself.
 
 ## Rules
 
-1. **One map, one place.** `.ai-rules/project/PROJECT_MAP.md` is the source of truth for structure. Keep it under ~150 lines so it fits in context cheaply.
-2. **Map what isn't obvious from `ls`:**
-   - what the project does, in two sentences
-   - layers and which folders implement them (see `03-layering.md`)
-   - entry points: how to run, test, ingest, evaluate
-   - where prompts live, where tools are defined, where the model adapter is
-   - data flows: user request → retrieval → model → validation → response
-   - external services and what each is used for
-   - "Here be dragons": fragile areas, generated code, things not to touch
+1. **One map, kept short.** `.ai-rules/project/PROJECT_MAP.md` stays under ~150 lines. **Never commit an unedited LLM-generated map.** Write it by hand or edit generated drafts hard.
+2. **Lead with what can't be inferred:**
+   - exact commands: install, run, test, evals, ingest
+   - non-default conventions and boundaries (which layer owns what, what must not import what)
+   - "here be dragons": fragile areas, generated code, things not to touch
+   - where prompts, tools, the model adapter and eval sets live
+   - data flows that aren't obvious from the code
+
+   Leave out anything `ls`, the README or the code already tells an agent.
 3. **Update the map in the same change** that moves, adds or removes a module, a data source, a tool or an external service.
-4. **Prompts are code.** Keep them in versioned files (e.g. `prompts/`), not inline strings scattered through business logic. List them in the map.
-5. **Tools are inventoried.** Every tool or function an agent can call is listed with what it does, what it can touch and whether it has side effects.
-6. **Data sources are inventoried.** Every corpus that feeds RAG is listed with its owner, format, size and refresh schedule.
+4. **Prompts are code.** Keep them in versioned files (e.g. `prompts/`), not inline strings scattered through business logic.
+5. **Inventory every tool and MCP server** an agent can call: what it does, what it can touch, read / write / destructive / external, whether it needs approval. For MCP servers also record the pinned version, a hash of the tool descriptions and the granted scopes (see `07-security.md`).
+6. **Inventory every RAG data source:** owner, format, size, refresh schedule, access rules.
+7. **Check the map earns its keep.** Every so often, run 3–5 real tasks with and without it. If it doesn't help, cut it down.
+
+## Cross-tool context files
+
+- **One canonical `AGENTS.md`**, bridged to each tool rather than copied: `CLAUDE.md` imports it with `@AGENTS.md` (Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists), Copilot and Cursor read pointers, and Gemini CLI can be configured to read `AGENTS.md`. The installer sets this up.
+- **Respect size limits.** Some tools cap or truncate context files. Keep each file small. See `99-dated-facts.md`.
+- **Prefer path-scoped rules over a bigger root file:** Claude Code `.claude/rules/` with `paths:`, Cursor rule globs, Copilot `applyTo:`, nested `AGENTS.md` in monorepo packages.
+- **Hard rules belong in tooling, not prose.** Use hooks, permission settings, linters and CI to enforce them. Context files are advice; agents can ignore advice.
+- **Verify what actually loads** (e.g. `/memory` in Claude Code or Gemini CLI) after changing these files.
 
 ## Large repos
 
-- Add a short `README.md` (5–20 lines) in each top-level module folder that explains its job and boundaries. The root map links to these instead of repeating them.
-- Generated maps (tree dumps, symbol indexes) are fine as **supplements**. Store them under `.ai-rules/project/generated/` and don't hand-edit them. The hand-written map explains *why*; generated maps show *what*.
+- A 5–20 line `README.md` in each top-level module explains its job and boundaries. The root map links to these instead of repeating them.
+- Generated maps (tree dumps, symbol indexes) are supplements. Store them under `.ai-rules/project/generated/`, don't hand-edit them, and don't load them by default.
 
 ## Context loading order (for agents)
 
-1. `AGENTS.md`
-2. `.ai-rules/rules/00-core.md`
-3. `.ai-rules/project/PROJECT_MAP.md`
-4. `.ai-rules/project/OVERRIDES.md`
-5. Only then: the rule file(s) and source files relevant to the task
+1. Always: `AGENTS.md`, `.ai-rules/rules/00-core.md`
+2. When relevant: `.ai-rules/project/OVERRIDES.md`, the parts of `PROJECT_MAP.md` you need
+3. Then: the topic rule file(s) and source files for the task
